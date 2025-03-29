@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BattleEye Ban Checker</title>
+    <script>
+        async function checkBan() {
+            const username = document.getElementById("username").value;
+            if (!username) {
+                alert("Please enter a username.");
+                return;
+            }
+
+            const response = await fetch(`http://127.0.0.1:5000/check_ban?username=${username}`);
+            const data = await response.json();
+
+            if (data.error) {
+                document.getElementById("result").innerText = `Error: ${data.error}`;
+            } else {
+                document.getElementById("result").innerText = 
+                    data.ban_reason ? 
+                    `User '${data.username}' is banned. Reason: ${data.ban_reason}` : 
+                    `User '${data.username}' is not banned.`;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>BattleEye Ban Checker</h2>
+    <input type="text" id="username" placeholder="Enter username">
+    <button onclick="checkBan()">Check Ban</button>
+    <p id="result"></p>
+</body>
+</html>
