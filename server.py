@@ -57,7 +57,13 @@ def check_ban():
         return jsonify({"error": "User not found"}), 404
 
     ban_reason = check_ban_reason(rid)
-    return jsonify({"username": username, "ban_reason": ban_reason})
+
+    # If there's no ban reason, the user is not banned
+    if not ban_reason:
+        return jsonify({"username": username, "status": "not banned"})
+    
+    # Otherwise, return the ban reason
+    return jsonify({"username": username, "status": "banned", "ban_reason": ban_reason})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
